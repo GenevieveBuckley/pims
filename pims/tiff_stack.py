@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import six
+import warnings
 
 import os
 from datetime import datetime
@@ -148,8 +149,10 @@ class TiffStack_tifffile(FramesSequence):
             if key == 'DateTime':
                 try:
                     md[key] = _tiff_datetime(md[key])
-                except Exception:
-                    pass
+                except ValueError:
+                    warnings.warn(
+                        "DateTime tiff tag could not be parsed correctly:" + \
+                        str(md[key]))
         return md
 
     @property
